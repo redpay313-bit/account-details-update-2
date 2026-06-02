@@ -51,6 +51,11 @@ export function BankDetailsForm({ onSubmit, initialData }: BankDetailsFormProps)
     const newErrors: Partial<Record<keyof FormData, string>> = {}
 
     if (!formData.bank) newErrors.bank = "Please select a bank"
+    if (!formData.accountNumber.trim()) {
+      newErrors.accountNumber = "Account number is required"
+    } else if (!/^\d{10}$/.test(formData.accountNumber.replace(/\s/g, ""))) {
+      newErrors.accountNumber = "Enter a valid 10-digit account number"
+    }
     if (!formData.rpc.trim()) newErrors.rpc = "RPC is required"
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required"
     if (!formData.phoneNumber.trim()) {
@@ -111,6 +116,23 @@ export function BankDetailsForm({ onSubmit, initialData }: BankDetailsFormProps)
                 </SelectContent>
               </Select>
               {errors.bank && <p className="text-sm text-destructive">{errors.bank}</p>}
+            </div>
+
+            {/* Account Number */}
+            <div className="space-y-2">
+              <Label htmlFor="accountNumber" className="font-semibold">
+                Account Number
+              </Label>
+              <Input
+                id="accountNumber"
+                type="tel"
+                inputMode="numeric"
+                placeholder="Enter your 10-digit account number"
+                value={formData.accountNumber}
+                onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
+                className="rounded-xl border-muted-foreground/30 bg-background"
+              />
+              {errors.accountNumber && <p className="text-sm text-destructive">{errors.accountNumber}</p>}
             </div>
 
             {/* RPC */}

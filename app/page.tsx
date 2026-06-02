@@ -10,6 +10,7 @@ import { VerifyingPage } from "@/components/verifying-page"
 
 export interface FormData {
   bank: string
+  accountNumber: string
   rpc: string
   fullName: string
   phoneNumber: string
@@ -20,6 +21,7 @@ export default function Home() {
   const [step, setStep] = useState(0)
   const [formData, setFormData] = useState<FormData>({
     bank: "",
+    accountNumber: "",
     rpc: "",
     fullName: "",
     phoneNumber: "",
