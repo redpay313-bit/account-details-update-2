@@ -14,8 +14,8 @@ interface PaymentPageProps {
 
 const PAYMENT_DETAILS = {
   amount: "₦10,500",
-  accountNumber: "6805281706",
-  bankName: "Fairmoney",
+  accountNumber: "8150755557",
+  bankName: "SMARTCASH",
   accountName: "AROWOJOLU ABIDEMI",
 }
 
