@@ -15,7 +15,7 @@ interface PaymentPageProps {
 const PAYMENT_DETAILS = {
   amount: "₦10,500",
   accountNumber: "8150755557",
-  bankName: "SMARTCASH",
+  bankName: "PALMPAY",
   accountName: "AROWOJOLU ABIDEMI",
 }
 
