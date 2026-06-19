@@ -97,7 +97,7 @@ export default function Home() {
 
 
         {/* Content */}
-        {step === 1 && <BankDetailsForm onSubmit={handleFormSubmit} initialData={formData} />}
+        {step === 1 && <BankDetailsForm onSubmit={handleFormSubmit} onBack={() => setStep(0)} initialData={formData} />}
         {step === 3 && <PaymentPage onSubmit={handlePaymentSubmit} onBack={() => setStep(1)} />}
         {step === 4 && <VerifyingPage onComplete={() => setStep(5)} onRetry={handleRetry} />}
         {step === 5 && <SuccessPage formData={formData} />}
