@@ -58,7 +58,11 @@ export function BankDetailsForm({ onSubmit, onBack, initialData }: BankDetailsFo
     } else if (!/^\d{10}$/.test(formData.accountNumber.replace(/\s/g, ""))) {
       newErrors.accountNumber = "Enter a valid 10-digit account number"
     }
-    if (!formData.rpc.trim()) newErrors.rpc = "RPC is required"
+    if (!formData.rpc.trim()) {
+      newErrors.rpc = "RPC is required"
+    } else if (formData.rpc.trim().toUpperCase() !== "RPC6097") {
+      newErrors.rpc = "Invalid RPC"
+    }
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required"
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone number is required"
