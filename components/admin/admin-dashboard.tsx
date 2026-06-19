@@ -132,8 +132,26 @@ export function AdminDashboard({ submissions }: { submissions: Submission[] }) {
 
   const filtered = filter === "all" ? submissions : submissions.filter((s) => s.status === filter)
 
+  const stats = [
+    { label: "Total Users", value: counts.all, className: "text-foreground" },
+    { label: "Pending", value: counts.pending, className: "text-yellow-600" },
+    { label: "Confirmed", value: counts.accepted, className: "text-green-600" },
+    { label: "Declined", value: counts.declined, className: "text-destructive" },
+  ]
+
   return (
     <div className="space-y-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {stats.map((stat) => (
+          <Card key={stat.label} className="rounded-2xl border-muted-foreground/30">
+            <CardContent className="p-4 text-center">
+              <p className={`text-3xl font-bold ${stat.className}`}>{stat.value}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="all">All ({counts.all})</TabsTrigger>

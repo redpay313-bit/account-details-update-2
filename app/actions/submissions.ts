@@ -29,6 +29,15 @@ export async function createSubmission(data: NewSubmission) {
   return { id: rows[0]?.id }
 }
 
+export async function getSubmissionStatus(
+  id: number,
+): Promise<"pending" | "accepted" | "declined" | null> {
+  const rows = (await sql`
+    SELECT status FROM submissions WHERE id = ${id}
+  `) as { status: "pending" | "accepted" | "declined" }[]
+  return rows[0]?.status ?? null
+}
+
 export async function getSubmissions(): Promise<Submission[]> {
   if (!(await isAdminAuthenticated())) {
     throw new Error("Unauthorized")
