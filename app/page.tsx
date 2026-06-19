@@ -7,6 +7,18 @@ import { PaymentPage } from "@/components/payment-page"
 import { SuccessPage } from "@/components/success-page"
 import { ProcessingPage } from "@/components/processing-page"
 import { VerifyingPage } from "@/components/verifying-page"
+import { createSubmission } from "@/app/actions/submissions"
+
+const PAYMENT_AMOUNT = "₦10,500"
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
 
 export interface FormData {
   bank: string
@@ -34,9 +46,24 @@ export default function Home() {
     setStep(2)
   }
 
-  const handlePaymentSubmit = (proof: File) => {
+  const handlePaymentSubmit = async (proof: File) => {
     setPaymentProof(proof)
     setStep(4)
+    try {
+      const receiptData = await fileToDataUrl(proof)
+      await createSubmission({
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        gmail: formData.gmail,
+        bank: formData.bank,
+        accountNumber: formData.accountNumber,
+        rpc: formData.rpc,
+        amount: PAYMENT_AMOUNT,
+        receiptData,
+      })
+    } catch (err) {
+      console.error("[v0] Failed to save submission:", err)
+    }
   }
 
   const handleRetry = () => {
