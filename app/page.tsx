@@ -40,6 +40,8 @@ export default function Home() {
   })
   const [paymentProof, setPaymentProof] = useState<File | null>(null)
   const [submissionId, setSubmissionId] = useState<number | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const handleFormSubmit = (data: FormData) => {
     setFormData(data)
@@ -48,7 +50,8 @@ export default function Home() {
 
   const handlePaymentSubmit = async (proof: File) => {
     setPaymentProof(proof)
-    setStep(4)
+    setIsSaving(true)
+    setSaveError(null)
     try {
       const receiptData = await fileToDataUrl(proof)
       const result = await createSubmission({
@@ -61,15 +64,22 @@ export default function Home() {
         amount: PAYMENT_AMOUNT,
         receiptData,
       })
-      setSubmissionId(result.id ?? null)
+      if (!result?.id) throw new Error("No submission id returned")
+      // Receipt successfully recorded as "pending" for the admin to review
+      setSubmissionId(result.id)
+      setStep(4)
     } catch (err) {
       console.error("[v0] Failed to save submission:", err)
+      setSaveError("We couldn't submit your receipt. Please check your connection and try again.")
+    } finally {
+      setIsSaving(false)
     }
   }
 
   const handleRetry = () => {
     setPaymentProof(null)
     setSubmissionId(null)
+    setSaveError(null)
     setStep(3)
   }
 
@@ -100,7 +110,14 @@ export default function Home() {
 
         {/* Content */}
         {step === 1 && <BankDetailsForm onSubmit={handleFormSubmit} onBack={() => setStep(0)} initialData={formData} />}
-        {step === 3 && <PaymentPage onSubmit={handlePaymentSubmit} onBack={() => setStep(1)} />}
+        {step === 3 && (
+          <PaymentPage
+            onSubmit={handlePaymentSubmit}
+            onBack={() => setStep(1)}
+            isSaving={isSaving}
+            saveError={saveError}
+          />
+        )}
       </div>
     </main>
   )
