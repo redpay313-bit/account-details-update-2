@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 
-const ADMIN_EMAIL = "arowojolu16@gmail.com"
+const ADMIN_EMAIL = "Muyiwa@gmail.com"
 const ADMIN_PASSWORD = "admin123"
 const SESSION_COOKIE = "redpay_admin_session"
 const SESSION_VALUE = "authenticated"
