@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft } from "lucide-react"
 import type { FormData } from "@/app/page"
 
 const NIGERIAN_BANKS = [
@@ -41,11 +40,10 @@ const NIGERIAN_BANKS = [
 
 interface BankDetailsFormProps {
   onSubmit: (data: FormData) => void
-  onBack: () => void
   initialData: FormData
 }
 
-export function BankDetailsForm({ onSubmit, onBack, initialData }: BankDetailsFormProps) {
+export function BankDetailsForm({ onSubmit, initialData }: BankDetailsFormProps) {
   const [formData, setFormData] = useState<FormData>(initialData)
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
 
@@ -58,11 +56,7 @@ export function BankDetailsForm({ onSubmit, onBack, initialData }: BankDetailsFo
     } else if (!/^\d{10}$/.test(formData.accountNumber.replace(/\s/g, ""))) {
       newErrors.accountNumber = "Enter a valid 10-digit account number"
     }
-    if (!formData.rpc.trim()) {
-      newErrors.rpc = "RPC is required"
-    } else if (formData.rpc.trim().toUpperCase() !== "RPC607") {
-      newErrors.rpc = "Invalid RPC"
-    }
+    if (!formData.rpc.trim()) newErrors.rpc = "RPC is required"
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required"
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone number is required"
@@ -88,19 +82,8 @@ export function BankDetailsForm({ onSubmit, onBack, initialData }: BankDetailsFo
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Back Button */}
-      <div className="px-6 pt-6">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </button>
-      </div>
-
       {/* Header */}
-      <div className="px-6 pt-4 pb-4 text-center">
+      <div className="px-6 pt-8 pb-4 text-center">
         <h1 className="text-3xl font-bold italic text-primary">RedPay</h1>
         <p className="text-muted-foreground">Activation</p>
       </div>

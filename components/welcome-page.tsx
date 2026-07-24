@@ -1,42 +1,15 @@
 "use client"
 
-import { useRef } from "react"
-import { useRouter } from "next/navigation"
-
 interface WelcomePageProps {
   onBegin: () => void
 }
 
 export function WelcomePage({ onBegin }: WelcomePageProps) {
-  const router = useRouter()
-  const tapCount = useRef(0)
-  const lastTap = useRef(0)
-
-  // Hidden admin access: tap the logo 5 times quickly
-  const handleSecretTap = () => {
-    const now = Date.now()
-    if (now - lastTap.current > 1500) {
-      tapCount.current = 0
-    }
-    lastTap.current = now
-    tapCount.current += 1
-    if (tapCount.current >= 5) {
-      tapCount.current = 0
-      router.push("/admin/login")
-    }
-  }
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
       {/* Logo */}
       <div className="mb-2">
-        <span
-          onClick={handleSecretTap}
-          className="cursor-default select-none text-8xl font-bold text-primary"
-          aria-hidden="true"
-        >
-          R
-        </span>
+        <span className="text-8xl font-bold text-primary">R</span>
       </div>
 
       {/* Brand Name */}
