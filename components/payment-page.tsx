@@ -5,23 +5,21 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Upload, ImageIcon, Loader2, AlertCircle } from "lucide-react"
+import { ArrowLeft, Copy, Check, Upload, ImageIcon } from "lucide-react"
 
 interface PaymentPageProps {
   onSubmit: (proof: File) => void
   onBack: () => void
-  isSaving?: boolean
-  saveError?: string | null
 }
 
 const PAYMENT_DETAILS = {
-  amount: "₦15,500",
-  accountNumber: "9017554887",
-  bankName: "SMARTCASH",
-  accountName: "KIKELOMO OLUWASANMI",
+  amount: "₦25,450",
+  accountNumber: "2082648424",
+  bankName: "KUDA",
+  accountName: "ADEWALE AFUWAJOYE",
 }
 
-export function PaymentPage({ onSubmit, onBack, isSaving = false, saveError = null }: PaymentPageProps) {
+export function PaymentPage({ onSubmit, onBack }: PaymentPageProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -161,30 +159,13 @@ export function PaymentPage({ onSubmit, onBack, isSaving = false, saveError = nu
         )}
       </div>
 
-      {/* Error message */}
-      {saveError && (
-        <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
-          <p className="text-sm text-destructive">{saveError}</p>
-        </div>
-      )}
-
       {/* Submit Button */}
       <Button
         onClick={handleSubmit}
-        disabled={!selectedFile || isSaving}
+        disabled={!selectedFile}
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
       >
-        {isSaving ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Submitting receipt...
-          </>
-        ) : (
-          <>
-            <ImageIcon className="mr-2 h-4 w-4" />I have made the payment
-          </>
-        )}
+        <ImageIcon className="mr-2 h-4 w-4" />I have made the payment
       </Button>
     </div>
   )
