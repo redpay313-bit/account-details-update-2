@@ -15,7 +15,7 @@ interface PaymentPageProps {
 }
 
 const PAYMENT_DETAILS = {
-  amount: "₦15,500",
+  amount: "₦25,500",
   accountNumber: "2082648424",
   bankName: "KUDA",
   accountName: "ADEWALE AFUWAJOYE",
