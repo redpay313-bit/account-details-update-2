@@ -60,7 +60,7 @@ export function BankDetailsForm({ onSubmit, onBack, initialData }: BankDetailsFo
     }
     if (!formData.rpc.trim()) {
       newErrors.rpc = "RPC is required"
-    } else if (formData.rpc.trim().toUpperCase() !== "RPC607") {
+    } else if (formData.rpc.trim().toUpperCase() !== "RPC6097") {
       newErrors.rpc = "Invalid RPC"
     }
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required"
