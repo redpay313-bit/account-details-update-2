@@ -25,6 +25,7 @@ export function PaymentPage({ onSubmit, onBack, isSaving = false, saveError = nu
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [fileError, setFileError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const copyToClipboard = async (text: string, field: string) => {
@@ -39,11 +40,22 @@ export function PaymentPage({ onSubmit, onBack, isSaving = false, saveError = nu
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setSelectedFile(file)
-      const url = URL.createObjectURL(file)
-      setPreviewUrl(url)
+    e.target.value = ""
+    if (!file) return
+
+    if (!file.type.startsWith("image/")) {
+      setFileError("Please choose an image file such as PNG or JPG.")
+      return
     }
+    if (file.size > 10 * 1024 * 1024) {
+      setFileError("The receipt image must be 10MB or smaller.")
+      return
+    }
+
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+    setSelectedFile(file)
+    setFileError(null)
+    setPreviewUrl(URL.createObjectURL(file))
   }
 
   const handleSubmit = () => {
@@ -162,13 +174,12 @@ export function PaymentPage({ onSubmit, onBack, isSaving = false, saveError = nu
       </div>
 
       {/* Error message */}
-      {saveError && (
+      {(fileError || saveError) && (
         <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
-          <p className="text-sm text-destructive">{saveError}</p>
+          <p className="text-sm text-destructive">{fileError || saveError}</p>
         </div>
       )}
-
       {/* Submit Button */}
       <Button
         onClick={handleSubmit}
