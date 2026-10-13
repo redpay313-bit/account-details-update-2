@@ -5,17 +5,16 @@ import { AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface VerifyingPageProps {
-  onComplete: () => void
-  onRetry?: () => void
+  onRetry: () => void
 }
 
-export function VerifyingPage({ onComplete, onRetry }: VerifyingPageProps) {
+export function VerifyingPage({ onRetry }: VerifyingPageProps) {
   const [verificationFailed, setVerificationFailed] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVerificationFailed(true)
-    }, 6000)
+    }, 10000)
 
     return () => clearTimeout(timer)
   }, [])
@@ -38,7 +37,7 @@ export function VerifyingPage({ onComplete, onRetry }: VerifyingPageProps) {
 
         {/* Error Message */}
         <div className="mb-8 text-center space-y-3">
-          <h2 className="text-2xl font-bold text-foreground">Payment Not Received</h2>
+          <h2 className="text-2xl font-bold text-foreground">Payment Not Confirmed</h2>
           <p className="text-center text-sm text-muted-foreground max-w-sm">
             We didn't receive any payment from you. Please make sure the transfer was successful and try uploading the payment proof again.
           </p>
